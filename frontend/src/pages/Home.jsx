@@ -1,9 +1,9 @@
 import { useState } from "react"
 import "../styles/home.css";
-import {toDo, doing} from "../components/Data";
+import {toDo, doing, tasksList} from "../components/Data";
 import ModalAddTask from "../components/Modal";
 
-function App() {
+function Home() {
   const [selectedProject, setSelectedProject] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
 
@@ -27,22 +27,12 @@ function App() {
                 className="custom-select"
                 value={selectedProject} 
                 onChange={handleProjectChange}>
-                <option value="" disabled hidden>Selecione um projeto</option>
+                <option value="" disabled hidden>Área</option>
                 <option value="college">Faculdade</option>
                 <option value="job">Trabalho</option>
                 <option value="home">Casa</option>
                 </select>
             </div>
-          <div>
-            <input
-              type="text"
-              id="searchInput"
-              className="custom-input"
-              value={searchTerm}
-              onChange={handleSearchChange}
-              placeholder="Digite para pesquisar..."
-            />
-          </div>
         </div>
         <div className='tasksArea'>
           <div className='containerTasks'>
@@ -52,12 +42,17 @@ function App() {
                     <p>...</p>
                 </button>
             </div>
-            {toDo.map((task, index) => (
-              <div key={index} className="task-item">
-                <h4>{task.title}</h4>
-                <p><strong>Responsável:</strong> {task.responsible}</p>
-                <p><strong>Tarefa:</strong> {task.task}</p>
-              </div>
+            {tasksList
+              .filter(task => task.title.includes(searchTerm) && 
+                (!selectedProject || task.ownerId === selectedProject) &&
+                task.status === 'toDo'  
+              )
+              .map((task, index) => (
+                <div key={index} className="task-item">
+                  <h4>{task.title}</h4>
+                  <p><strong>Responsável:</strong> {task.responsible}</p>
+                  <p><strong>Tarefa:</strong> {task.task}</p>
+                </div>
             ))}
             <button className="add-button" >
                 <ModalAddTask />
@@ -70,12 +65,17 @@ function App() {
                     <p>...</p>
                 </button>
             </div>
-            {doing.map((task, index) => (
-              <div key={index} className="task-item">
-                <h4>{task.title}</h4>
-                <p><strong>Responsável:</strong> {task.responsible}</p>
-                <p><strong>Tarefa:</strong> {task.task}</p>
-              </div>
+            {tasksList
+              .filter(task => task.title.includes(searchTerm) && 
+                (!selectedProject || task.ownerId === selectedProject) &&
+                task.status === 'doing'  
+              )
+              .map((task, index) => (
+                <div key={index} className="task-item">
+                  <h4>{task.title}</h4>
+                  <p><strong>Responsável:</strong> {task.responsible}</p>
+                  <p><strong>Tarefa:</strong> {task.task}</p>
+                </div>
             ))}
           </div>
           <div className='containerTasks'>
@@ -85,6 +85,18 @@ function App() {
                     <p>...</p>
                 </button>
             </div>
+            {tasksList
+              .filter(task => task.title.includes(searchTerm) && 
+                (!selectedProject || task.ownerId === selectedProject) &&
+                task.status === 'done'  
+              )
+              .map((task, index) => (
+                <div key={index} className="task-item">
+                  <h4>{task.title}</h4>
+                  <p><strong>Responsável:</strong> {task.responsible}</p>
+                  <p><strong>Tarefa:</strong> {task.task}</p>
+                </div>
+            ))}
           </div>
         </div>
       </div>
@@ -93,4 +105,4 @@ function App() {
   )
 }
 
-export default App
+export default Home

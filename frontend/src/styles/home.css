@@ -1,7 +1,15 @@
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
 #root {
     max-width: 100%;
     margin: 0;
     padding: 0;
+    display: flex;
+  flex-grow: 1;
   }
   
   .logo {
@@ -38,18 +46,6 @@
   
   .read-the-docs {
     color: #888;
-  }
-  
-  html, body {
-    height: 100%;
-    margin: 0;
-    padding: 0;
-  }
-  
-  #root {
-    display: flex;
-    flex-grow: 1;
-    width: 100%;
   }
   
   .body {
