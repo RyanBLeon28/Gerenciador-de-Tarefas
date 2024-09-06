@@ -1,8 +1,7 @@
-import { useState } from 'react'
-import '../styles/home.css'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus } from '@fortawesome/free-solid-svg-icons';
-import {toDo, doing} from '../components/Data';
+import { useState } from "react"
+import "../styles/home.css";
+import {toDo, doing} from "../components/Data";
+import ModalAddTask from "../components/Modal";
 
 function App() {
   const [selectedProject, setSelectedProject] = useState('');
@@ -23,7 +22,7 @@ function App() {
         <div className='barSection'>
             <h1>LP Tarefas</h1>
             <div>
-                <select 
+                <select   
                 id="projectSelect" 
                 className="custom-select"
                 value={selectedProject} 
@@ -61,8 +60,7 @@ function App() {
               </div>
             ))}
             <button className="add-button" >
-                <FontAwesomeIcon icon={faPlus} />
-                <p>Adicionar tarefa</p>
+                <ModalAddTask />
             </button>
           </div>
           <div className='containerTasks'>
