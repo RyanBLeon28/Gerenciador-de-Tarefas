@@ -2,6 +2,16 @@
 
 Oi, fiquei ate as 5am fazendo essa porra e nao consegui terminar.
 O meu unico divertimento dessa noite vai ser fazer esse doc entao vamo dale rapaziadaaaaaaa (rec)ebaaaa
+Alem disse, nao consegui hospedar o nginx so deu pau e eu to com 0 paciencia pra arrumar hoje.
+
+Como baixar go:
+    ```https://go.dev/doc/install```
+
+depois disso entra na pasta e lanca so um:
+    ```go mod tidy```
+
+e pra rodar:
+    ```make run```
 
 ## Rotas:
 
