@@ -11,7 +11,7 @@ html, body {
   .register-container {
     width: 300px;
     padding: 20px;
-    background-color: #d3d3d3; /* Cor cinza */
+    background-color: var(--primary-color); 
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     text-align: center;

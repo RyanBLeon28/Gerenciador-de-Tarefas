@@ -1,9 +1,8 @@
 import { useState } from "react"
 import { useNavigate } from "react-router-dom";
-import '../styles/login.css'
+import '../styles/loginB.css'
 
-
-function Login() {
+function LoginB() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -57,4 +56,4 @@ function Login() {
   );
 }
 
-export default Login;
+export default LoginB;

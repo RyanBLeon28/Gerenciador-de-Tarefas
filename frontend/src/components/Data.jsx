@@ -1,63 +1,9 @@
-
-export const toDo = [
-    {
-        id : 1,
-        ownerId: '001',
-        title: 'Comer',
-        responsible: 'Ryan',
-        task: 'Descrição da tarefa 1',
-        status: 'toDo'
-    },
-    {
-        id : 2,
-        ownerId: '001',
-        title: 'Dormir',
-        responsible: 'Ryan',
-        task: 'Descrição da tarefa 2',
-        status: 'toDo'
-    },
-    {
-        id : 3,
-        ownerId: '001',
-        title: 'ir ao banheiro',
-        responsible: 'Ryan',
-        task: 'Descrição da tarefa 3',
-        status: 'toDo'
-    }
-];
-
-export const doing = [
-    {
-        id : 1,
-        ownerId: '001',
-        title: 'Comer',
-        responsible: 'Ryan',
-        task: 'Descrição da tarefa 1',
-        status: 'toDo'
-    },
-    {
-        id : 2,
-        ownerId: '001',
-        title: 'Dormir',
-        responsible: 'Ryan',
-        task: 'Descrição da tarefa 2',
-        status: 'toDo'
-    },
-    {
-        id : 3,
-        ownerId: '001',
-        title: 'ir ao banheiro',
-        responsible: 'Ryan',
-        task: 'Descrição da tarefa 3',
-        status: 'toDo'
-    }
-];
-
 export const tasksList = [
     {
         id : 1,
         ownerId: '001',
-        title: 'Dançar',
+        area: 'faculdade',
+        title: 'trabalho Fisica',
         responsible: 'Ryan',
         task: 'Descrição da tarefa 1',
         status: 'toDo'
@@ -65,7 +11,8 @@ export const tasksList = [
     {
         id : 2,
         ownerId: 'Dançar',
-        title: 'Dormir',
+        area: 'faculdade',
+        title: 'trabalho Calculo N',
         responsible: 'Ryan',
         task: 'Descrição da tarefa 2',
         status: 'toDo'
@@ -73,7 +20,8 @@ export const tasksList = [
     {
         id : 3,
         ownerId: 'Dançar',
-        title: 'ir ao banheiro',
+        area: 'faculdade',
+        title: 'trabalho LP',
         responsible: 'Ryan',
         task: 'Descrição da tarefa 3',
         status: 'toDo'
@@ -81,7 +29,8 @@ export const tasksList = [
     {
         id : 4,
         ownerId: '001',
-        title: 'Dançar',
+        area: 'faculdade',
+        title: 'trabalho AIC',
         responsible: 'Ryan',
         task: 'Descrição da tarefa 3',
         status: 'toDo'
@@ -89,7 +38,8 @@ export const tasksList = [
     {
         id : 5,
         ownerId: '001',
-        title: 'Dançar',
+        area: 'casa',
+        title: 'varrer a casa',
         responsible: 'Ryan',
         task: 'Descrição da tarefa 3',
         status: 'toDo'
@@ -97,7 +47,8 @@ export const tasksList = [
     {
         id: 6,
         ownerId: '001',
-        title: 'Nadar',
+        area: 'casa',
+        title: 'lavar louça',
         responsible: 'Ryan',
         task: 'Descrição da tarefa 1',
         status: 'doing'
@@ -105,7 +56,8 @@ export const tasksList = [
     {   
         id: 7,
         ownerId: '001',
-        title: 'Correr',
+        area: 'casa',
+        title: 'tirar o lixo',
         responsible: 'Ryan',
         task: 'Descrição da tarefa 1',
         status: 'doing'
@@ -113,7 +65,8 @@ export const tasksList = [
     {
         id: 8,
         ownerId: '001',
-        title: 'carteira',
+        area: 'trabalho',
+        title: 'Escrever relatório',
         responsible: 'Ryan',
         task: 'Descrição da tarefa 1',
         status: 'done'
@@ -121,9 +74,10 @@ export const tasksList = [
     {   
         id: 9,
         ownerId: '001',
-        title: 'aula',
+        area: 'trabalho',
+        title: 'Reuniao',
         responsible: 'Ryan',
         task: 'Descrição da tarefa 1',
-        status: 'done'
+        status: 'toDo'
     }
 ];

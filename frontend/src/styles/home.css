@@ -167,3 +167,8 @@ html, body {
 .task-item p {
     margin: 0.5rem 0;
 }
+
+.status-button{
+  background-color: var(--secondary-color);
+  margin-right: 2%;
+}
