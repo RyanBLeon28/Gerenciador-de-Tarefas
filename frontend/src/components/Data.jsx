@@ -1,46 +1,50 @@
 
-export const toDo = [
+export const toDoList = [
     {
-        id : 1,
+        id: 1,
         title: 'Comer',
         responsible: 'Ryan',
-        task: 'Descrição da tarefa 1'
+        description: 'Descrição da tarefa 1'
     },
     {
-        id : 2,
+        id: 2,
         title: 'Dormir',
         responsible: 'Ryan',
-        task: 'Descrição da tarefa 2'
+        description: 'Descrição da tarefa 2'
     },
     {
-        id : 3,
+        id: 3,
         title: 'ir ao banheiro',
         responsible: 'Ryan',
-        task: 'Descrição da tarefa 3'
+        description: 'Descrição da tarefa 3'
     },
     {
-        id : 4,
+        id: 4,
         title: 'academia',
         responsible: 'Ryan',
-        task: 'Descrição da tarefa 3'
+        description: 'Descrição da tarefa 3'
     },
     {
-        id : 5,
+        id: 5,
         title: 'futebol',
         responsible: 'Ryan',
-        task: 'Descrição da tarefa 3'
+        description: 'Descrição da tarefa 3'
     }
 ];
 
-export const doing = [
+export const doingList = [
     {
+        id: 6,
         title: 'Comer',
         responsible: 'Ryan',
-        task: 'Descrição da tarefa 1'
+        description: 'Descrição da tarefa 1'
     },
     {
+        id: 7,
         title: 'Comer',
         responsible: 'Ryan',
-        task: 'Descrição da tarefa 1'
+        description: 'Descrição da tarefa 1'
     }
 ];
+
+export const doneList = [];

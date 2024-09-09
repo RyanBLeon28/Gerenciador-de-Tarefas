@@ -1,12 +1,15 @@
-import { useState } from "react"
+import { useState, useContext } from "react";
 import "../styles/home.css";
-import {toDo, doing} from "../components/Data";
-import ModalAddTask from "../components/Modal";
+import TaskColumn from "../components/column";
+import { TasksContext } from "../context";
 
 function App() {
+
   const [selectedProject, setSelectedProject] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
 
+  const { toDo, doing, done } = useContext(TasksContext);
+  
   const handleProjectChange = (event) => {
     setSelectedProject(event.target.value);
   };
@@ -44,49 +47,12 @@ function App() {
             />
           </div>
         </div>
-        <div className='tasksArea'>
-          <div className='containerTasks'>
-            <div className='headerTasks'>
-                <h2>Tarefas</h2>
-                <button className="setting-button" >
-                    <p>...</p>
-                </button>
-            </div>
-            {toDo.map((task, index) => (
-              <div key={index} className="task-item">
-                <h4>{task.title}</h4>
-                <p><strong>Responsável:</strong> {task.responsible}</p>
-                <p><strong>Tarefa:</strong> {task.task}</p>
-              </div>
-            ))}
-            <button className="add-button" >
-                <ModalAddTask />
-            </button>
+        
+          <div className='tasksArea'>
+            <TaskColumn column={"Pendências"} index={1} array={toDo}/>
+            <TaskColumn column={"Em andamento"} index={2} array={doing}/>
+            <TaskColumn column={"Concluídas"} index={3} array={done}/>
           </div>
-          <div className='containerTasks'>
-            <div className='headerTasks'>
-                <h2>Em andamento</h2>
-                <button className="setting-button" >
-                    <p>...</p>
-                </button>
-            </div>
-            {doing.map((task, index) => (
-              <div key={index} className="task-item">
-                <h4>{task.title}</h4>
-                <p><strong>Responsável:</strong> {task.responsible}</p>
-                <p><strong>Tarefa:</strong> {task.task}</p>
-              </div>
-            ))}
-          </div>
-          <div className='containerTasks'>
-            <div className='headerTasks'>
-                <h2>Concluídas</h2>
-                <button className="setting-button" >
-                    <p>...</p>
-                </button>
-            </div>
-          </div>
-        </div>
       </div>
     </div>
     </>

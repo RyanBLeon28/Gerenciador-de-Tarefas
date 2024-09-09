@@ -32,7 +32,7 @@ const ModalAddTask = () => {
 
     return (
         <>
-            <Button onClick={showModal} style={{ background: "transparent", borderColor: "#FFF", color: "#FFF"}}>
+            <Button onClick={showModal} style={{ background: "transparent", borderColor: "#FFF", color: "#FFF" }}>
                 <FontAwesomeIcon icon={faPlus} />
                 Adicionar Task
             </Button>
