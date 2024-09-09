@@ -1,50 +1,64 @@
-
-export const toDoList = [
+export const tasksList = [
     {
-        id: 1,
-        title: 'Comer',
+        id : 1,
+        ownerId: '001',
+        area: 'university',
+        title: 'trabalho Fisica',
         responsible: 'Ryan',
-        description: 'Descrição da tarefa 1'
+        description: 'Descrição da tarefa 1',
+        status: 'toDo'
     },
     {
-        id: 2,
-        title: 'Dormir',
+        id : 2,
+        ownerId: '001',
+        area: 'university',
+        title: 'trabalho Calculo N',
         responsible: 'Ryan',
-        description: 'Descrição da tarefa 2'
+        description: 'Descrição da tarefa 2',
+        status: 'toDo'
     },
     {
-        id: 3,
-        title: 'ir ao banheiro',
+        id : 3,
+        ownerId: '001',
+        area: 'university',
+        title: 'trabalho LP',
         responsible: 'Ryan',
-        description: 'Descrição da tarefa 3'
+        description: 'Descrição da tarefa 3',
+        status: 'toDo'
     },
     {
-        id: 4,
-        title: 'academia',
+        id : 4,
+        ownerId: '001',
+        area: 'university',
+        title: 'trabalho AIC',
         responsible: 'Ryan',
-        description: 'Descrição da tarefa 3'
+        description: 'Descrição da tarefa 3',
+        status: 'toDo'
     },
     {
-        id: 5,
-        title: 'futebol',
+        id : 5,
+        ownerId: '001',
+        area: 'house',
+        title: 'varrer a casa',
         responsible: 'Ryan',
-        description: 'Descrição da tarefa 3'
-    }
-];
-
-export const doingList = [
+        description: 'Descrição da tarefa 3',
+        status: 'toDo'
+    },
     {
         id: 6,
-        title: 'Comer',
+        ownerId: '001',
+        area: 'house',
+        title: 'lavar louça',
+        responsible: 'Ryan',
+        description: 'Descrição da tarefa 1',
+        status: 'doing'
+    },
+    {   
+        id: 7,
+        ownerId: '001',
+        area: 'house',
+        title: 'tirar o lixo',
         responsible: 'Ryan',
         description: 'Descrição da tarefa 1'
     },
-    {
-        id: 7,
-        title: 'Comer',
-        responsible: 'Ryan',
-        description: 'Descrição da tarefa 1'
-    }
 ];
-
-export const doneList = [];

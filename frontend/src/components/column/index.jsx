@@ -4,6 +4,7 @@ import { Column } from "./style";
 import { useDrop } from "react-dnd";
 
 const TaskColumn = ({ column, index, array}) => {
+
     const [{ canDrop, isOver }, dropref] = useDrop({
         accept: "task",
         drop: (item, monitor) => {

@@ -1,7 +1,7 @@
 :root {
   --primary-color: rgb(28, 115, 80);
   --primary-hover-color: #535bf2;
-  --secondary-color: #ff6464;
+  --secondary-color: #389e50;
   --secondary-hover-color: #f25353;
 
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
@@ -30,6 +30,8 @@ a:hover {
 body {
   margin: 0;
   display: flex;
+  justify-content: center; /* Centraliza horizontalmente */
+  align-items: center;
   /* place-items: center; */
   /* min-width: 320px; */
   /* min-height: 100vh; */

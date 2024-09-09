@@ -49,10 +49,10 @@ const ModalAddTask = () => {
                     form={form}
                     layout="vertical"
                 >
-                    <Form.Item label="Título" name="title" required tooltip="Este campo é destinado ao título da tarefa">
+                    <Form.Item label="Título" name="title" required tooltip="Escreva o título da tarefa">
                         <Input placeholder="input placeholder" />
                     </Form.Item>
-                    <Form.Item label="Field B" name="description" required tooltip="Este campo é destinado a descrição da tarefa">
+                    <Form.Item label="Descrição" name="description" required tooltip="Escreva a descrição da tarefa">
                         <Input.TextArea />
                     </Form.Item>
                 </Form>

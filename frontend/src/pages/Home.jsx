@@ -1,62 +1,58 @@
-import { useState, useContext } from "react";
+import { useState, useContext } from "react";;
 import "../styles/home.css";
+import { Select, Space } from 'antd';
 import TaskColumn from "../components/column";
 import { TasksContext } from "../context";
+// import { tasksList as initialTasksList } from "../components/Data";
 
-function App() {
+function Home() {
+  // const [tasksList, setTasksList] = useState(initialTasksList);
 
-  const [selectedProject, setSelectedProject] = useState('');
-  const [searchTerm, setSearchTerm] = useState('');
-
+  // const [selectedProject, setSelectedProject] = useState('');
+  // const [searchTerm, setSearchTerm] = useState('');
+  
+  const { selectedProject, setSelectedProject } = useContext(TasksContext);
   const { toDo, doing, done } = useContext(TasksContext);
   
-  const handleProjectChange = (event) => {
-    setSelectedProject(event.target.value);
+  
+  const handleProjectChange = (value) => {
+    setSelectedProject(value);
   };
 
-  const handleSearchChange = (event) => {
-    setSearchTerm(event.target.value);
+  const updateTaskStatus = (taskId, newStatus) => {
+    const updatedTasks = tasksList.map(task =>
+      task.id === taskId ? { ...task, status: newStatus } : task
+    );
+    setTasksList(updatedTasks);
   };
 
   return (
     <>
-    <div className='body'>
       <div className='container'>
         <div className='barSection'>
-            <h1>LP Tarefas</h1>
-            <div>
-                <select   
-                id="projectSelect" 
-                className="custom-select"
-                value={selectedProject} 
-                onChange={handleProjectChange}>
-                <option value="" disabled hidden>Selecione um projeto</option>
-                <option value="college">Faculdade</option>
-                <option value="job">Trabalho</option>
-                <option value="home">Casa</option>
-                </select>
-            </div>
+          <h1>LP Tarefas</h1>
           <div>
-            <input
-              type="text"
-              id="searchInput"
-              className="custom-input"
-              value={searchTerm}
-              onChange={handleSearchChange}
-              placeholder="Digite para pesquisar..."
-            />
+          <Select
+            defaultValue="Selecionar área"
+            style={{ width: 180 }}
+            onChange={handleProjectChange}
+            options={[
+              { value: 'university', label: 'Faculdade' },
+              { value: 'work', label: 'Trabalho' },
+              { value: 'house', label: 'casa' },
+            ]}
+          />
           </div>
         </div>
-        
-          <div className='tasksArea'>
-            <TaskColumn column={"Pendências"} index={1} array={toDo}/>
-            <TaskColumn column={"Em andamento"} index={2} array={doing}/>
-            <TaskColumn column={"Concluídas"} index={3} array={done}/>
-          </div>
+        <div className='tasksArea'>
+          <TaskColumn column={"Pendências"} index={1} array={toDo}/>
+          <TaskColumn column={"Em andamento"} index={2} array={doing}/>
+          <TaskColumn column={"Concluídas"} index={3} array={done}/>
+        </div>
       </div>
-    </div>
-    </>
-  )
+    </>      
+  );
 }
 
-export default App
+export default Home;
+
