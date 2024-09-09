@@ -13,7 +13,7 @@ type Sqlite struct {
 }
 
 func Connect() (*Sqlite, error) {
-	db, err := sql.Open("sqlite3", "foo/foo.db")
+	db, err := sql.Open("sqlite3", "database/prod.db")
 	log.Printf("open db")
 	if err != nil {
 		log.Fatal(err)
@@ -35,7 +35,7 @@ func (s *Sqlite) Init_Users() error {
 		username VARCHAR(100) NOT NULL,
 		password VARCHAR(100) NOT NULL,
 		created_at TIMESTAMP NOT NULL DEFAULT current_timestamp
-	)`
+	);`
 	_, err := s.db.Exec(q)
 	return err
 }
@@ -44,66 +44,73 @@ func (s *Sqlite) Init_Tasklist() error {
 	q := `CREATE TABLE IF NOT EXISTS tasklists (
 		id INTEGER PRIMARY KEY AUTOINCREMENT,
 		title TEXT NOT NULL,
-		owner_id INTEGER NOT NULL REFERENCES account(id),
+		owner_id INTEGER NOT NULL,
 		created_at TIMESTAMP NOT NULL DEFAULT current_timestamp,
-	)`
+		FOREIGN KEY (owner_id) REFERENCES account(id) ON DELETE CASCADE
+	);`
 	_, err := s.db.Exec(q)
 	return err
 }
 
 func (s *Sqlite) Init_Task() error {
-	q := `CREATE TABLE task (
+	q := `CREATE TABLE IF NOT EXISTS task (
 		id INTEGER PRIMARY KEY AUTOINCREMENT,
-		parent_id INTEGER NOT NULL REFERENCES tasklists(id),
+		parent_id INTEGER NOT NULL,
 		title TEXT NOT NULL,
 		description TEXT,
-		status INTEGER
-	)`
+		status INTEGER,
+	    FOREIGN KEY (parent_id) REFERENCES tasklists(id) ON DELETE CASCADE
+	);`
 	_, err := s.db.Exec(q)
 	return err
 }
 
 func (s *Sqlite) Init() error {
-	err_user := s.Init_Users()
-	if err_user != nil {
-		log.Printf("error in init users -> %v", err_user)
-		return err_user
+	err := s.Init_Users()
+	if err != nil {
+		log.Printf("error in init users -> %v", err)
+		return err
 	}
 
-	err_tasklist := s.Init_Tasklist()
-	if err_tasklist != nil {
-		log.Printf("error init tasklists table -> %v", err_tasklist)
-		return err_tasklist
+	err = s.Init_Tasklist()
+	if err != nil {
+		log.Printf("error init tasklists table -> %v", err)
+		return err
 	}
 
-	err_task := s.Init_Task()
-	if err_task != nil {
-		log.Printf("error init task table -> %v", err_task)
-		return err_task
+	err = s.Init_Task()
+	if err != nil {
+		log.Printf("error init task table -> %v", err)
+		return err
 	}
+
+	_, err = s.db.Exec("PRAGMA foreign_keys = ON;")
+	if err != nil {
+		log.Fatal("error enabling foreign key constraints:", err)
+		return err
+	}
+
 	return nil
 }
 
 type Storage interface {
 	Create_User(*Account) (*Account, error)
-	// Delete_User(*Account) error
-	// Update_User(*Account) error
-	GetAll_User() ([]*Account, error)
+	Delete_User(*Account) error
 	GetById_User(int) (*Account, error)
 	GetByUsername_User(string) (*Account, error)
 
 	Create_Tasklist(string, int) (*Tasklist, error)
-	GetAllFromOwnerID_Tasklist(int) ([]*Tasklist, error)
 	Update_Tasklist(int, int, string, *Task) (*Tasklist, error)
-	// Delete_Tasklist(*Task) error
-	// GetById_Tasklist(*Task) error
-	// GetData_Tasklist(*Task) error
+	Delete_Tasklist(int, string) error
+	GetAllFromOwnerID_Tasklist(int) ([]*Tasklist, error)
 
-	Create_Task(*Task) error
-	Update_Task(int, int, string, string, int) error
+	Create_Task(*Task) (*Tasklist, error)
+	Update_Task(int, *Task) (*Tasklist, error)
+	Delete_Task(int, int) (*Tasklist, error)
 	GetAllFromParentID_Task(int) ([]*Task, error)
 	GetById_Task(int) (*Task, error)
-	Delete_Task(int, int) error
+
+	GetAll_User() ([]*FullAccount, error)
 }
 
 func (s *Sqlite) Create_User(acc *Account) (*Account, error) {
@@ -125,6 +132,15 @@ func (s *Sqlite) Create_User(acc *Account) (*Account, error) {
 	return new, nil
 }
 
+func (s *Sqlite) Delete_User(u *Account) error {
+	q := `delete from account where id = ?`
+	_, err := s.db.Exec(q, u.ID)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 func (s *Sqlite) GetByUsername_User(n string) (*Account, error) {
 	row, err := s.db.Query(`select * from account where username= ?`, n)
 	log.Printf("get by username %s", n)
@@ -136,24 +152,29 @@ func (s *Sqlite) GetByUsername_User(n string) (*Account, error) {
 		if err != nil {
 			return nil, err
 		}
+		row.Close()
 		return account, nil
 	}
 	return nil, fmt.Errorf("no account for %s", n)
 }
 
-func (s *Sqlite) GetAll_User() ([]*Account, error) {
+func (s *Sqlite) GetAll_User() ([]*FullAccount, error) {
 	row, err := s.db.Query("select * from account")
 	if err != nil {
 		return nil, err
 	}
-	list := []*Account{}
+	list := []*FullAccount{}
 	for row.Next() {
-		account, err := scanAccount(row)
+		ac := new(FullAccount)
+		account_info, err := scanAccount(row)
 		if err != nil {
 			row.Close()
 			return nil, err
 		}
-		list = append(list, account)
+
+		ac.User = account_info
+		ac.List, _ = s.GetAllFromOwnerID_Tasklist(account_info.ID)
+		list = append(list, ac)
 	}
 	return list, nil
 }
@@ -176,8 +197,12 @@ func (s *Sqlite) GetById_User(id int) (*Account, error) {
 	}
 
 	for rows.Next() {
+		acc, err := scanAccount(rows)
+		if err != nil {
+			return nil, err
+		}
 		rows.Close()
-		return scanAccount(rows)
+		return acc, nil
 	}
 
 	return nil, fmt.Errorf("account %d not found", id)
@@ -241,6 +266,10 @@ func (s *Sqlite) GetById_Tasklist(id int) (*Tasklist, error) {
 			return nil, err
 		}
 		rows.Close()
+
+		tasks, err := s.GetAllFromParentID_Task(tasklist.ID)
+		tasklist.Tasks = tasks
+
 		return tasklist, nil
 	}
 	return nil, fmt.Errorf("Not found")
@@ -249,13 +278,11 @@ func (s *Sqlite) GetById_Tasklist(id int) (*Tasklist, error) {
 func scanTasklist(rows *sql.Rows) (*Tasklist, error) {
 	list := new(Tasklist)
 	var timestamp string
-	var data sql.NullString
 	err := rows.Scan(
 		&list.ID,
 		&list.Title,
 		&list.OwnerID,
 		&timestamp,
-		&data,
 	)
 
 	return list, err
@@ -282,90 +309,111 @@ func (s *Sqlite) Update_Tasklist(owner_id int, tasklist_id int, title string, t 
 		return nil, fmt.Errorf("error updating tasklist: %v", err)
 	}
 
-	if t != nil {
-		task, err := s.GetById_Task(t.ID)
+	if t != nil && t.ID != 0 {
+		_, err = s.Update_Task(tasklist.ID, t)
 		if err != nil {
-			return nil, fmt.Errorf("error fetching task: %v", err)
-		}
-
-		updated := false
-		if task.Title != t.Title {
-			task.Title = t.Title
-			updated = true
-		}
-		if task.Description != t.Description {
-			task.Description = t.Description
-			updated = true
-		}
-		if task.Status != t.Status {
-			task.Status = t.Status
-			updated = true
-		}
-		if updated {
-			err := s.Update_Task(tasklist_id, task.ID, task.Title, task.Description, task.Status)
-			if err != nil {
-				return nil, fmt.Errorf("error updating task: %v", err)
-			}
+			return nil, fmt.Errorf("error updating task: %v", err)
 		}
 	}
 
 	log.Printf("Tasklist updated: %v", tasklist)
+	tasklist, err = s.GetById_Tasklist(tasklist_id)
+	if err != nil {
+		return nil, err
+	}
 	return tasklist, nil
 }
 
-func (s *Sqlite) Create_Task(t *Task) error {
-	q := `insert into task (parent_id, title, description, status) values (?, ?, ?, ?)`
-	_, err := s.db.Exec(q, t.ParentID, t.Title, t.Description, t.Status)
+func (s *Sqlite) Delete_Tasklist(id int, title string) error {
+	if id != 0 {
+		q := `delete from tasklists where id = ?`
+		_, err := s.db.Exec(q, id)
+		if err != nil {
+			return err
+		}
+		log.Printf("remove from tasklists where id %d", id)
+		return nil
+	}
+	q := `delete from tasklists where title = ?`
+	_, err := s.db.Exec(q, title)
 	if err != nil {
 		return err
 	}
+	log.Printf("remove from tasklists where title %s", title)
 	return nil
 }
 
-func (s *Sqlite) Delete_Task(id, parentID int) error {
+func (s *Sqlite) Create_Task(t *Task) (*Tasklist, error) {
+	q := `insert into task (parent_id, title, description, status) values (?, ?, ?, ?)`
+	_, err := s.db.Exec(q, t.ParentID, t.Title, t.Description, t.Status)
+	if err != nil {
+		return nil, err
+	}
+
+	tasklist, err := s.GetById_Tasklist(t.ParentID)
+	if err != nil {
+		return nil, err
+	}
+	return tasklist, nil
+}
+
+func (s *Sqlite) Delete_Task(id, parentID int) (*Tasklist, error) {
 	q := `delete from task where id = ? and parent_id = ?`
 
 	_, err := s.db.Exec(q, id, parentID)
 	if err != nil {
-		return fmt.Errorf("error deleting task with id %d and parent_id %d: %v", id, parentID, err)
+		return nil, fmt.Errorf("error deleting task with id %d and parent_id %d: %v", id, parentID, err)
 	}
 
-	return nil
+	tasklist, err := s.GetById_Tasklist(parentID)
+	if err != nil {
+		return nil, err
+	}
+	return tasklist, nil
 }
 
-func (s *Sqlite) Update_Task(parent_id int, id int, title string, description string, status int) error {
+func (s *Sqlite) Update_Task(parent_id int, t *Task) (*Tasklist, error) {
 	q := `update task set title = ?, description = ?, status = ? where parent_id = ? and id = ?`
 
-	og, err := s.GetById_Task(id)
+	og, err := s.GetById_Task(t.ID)
 	if err != nil {
-		return err
+		return nil, err
+	}
+	tasklist, err := s.GetById_Tasklist(parent_id)
+	if err != nil {
+		return nil, err
 	}
 
 	updated := false
 
-	if og.Title != title {
-		og.Title = title
+	if og.Title != t.Title {
+		og.Title = t.Title
 		updated = true
 	}
-	if og.Description != description {
-		og.Description = description
+	if og.Description != t.Description {
+		og.Description = t.Description
 		updated = true
 	}
-	if og.Status != status {
-		og.Status = status
+	if og.Status != t.Status {
+		og.Status = t.Status
 		updated = true
 	}
 
 	if !updated {
-		return nil
+		return tasklist, nil
 	}
 
-	_, _err := s.db.Exec(q, og.Title, og.Description, og.Status, parent_id, id)
-	if _err != nil {
-		return _err
+	_, err = s.db.Exec(q, og.Title, og.Description, og.Status, parent_id, og.ID)
+	if err != nil {
+		return nil, nil
 	}
 
-	return nil
+	tasklist, err = s.GetById_Tasklist(parent_id)
+	if err != nil {
+		return nil, err
+	}
+
+	return tasklist, nil
 }
 
 func (s *Sqlite) GetById_Task(id int) (*Task, error) {
