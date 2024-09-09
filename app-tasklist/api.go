@@ -4,12 +4,30 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"github.com/gorilla/mux"
+
 	"io"
 	"log"
 	"net/http"
 	"os"
+
+	"github.com/gorilla/mux"
 )
+
+func enableCORS(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Access-Control-Allow-Origin", "*")
+		w.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS, PUT, PATCH, DELETE")
+		w.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization")
+
+		// Handle preflight OPTIONS request
+		if r.Method == "OPTIONS" {
+			w.WriteHeader(http.StatusOK)
+			return
+		}
+
+		next.ServeHTTP(w, r)
+	})
+}
 
 func WriteJSON(w http.ResponseWriter, status int, v any) error {
 	w.Header().Add("Content-Type", "application/json")
@@ -48,6 +66,8 @@ func getTest(w http.ResponseWriter, r *http.Request) {
 
 func (s *APIServer) Run() {
 	router := mux.NewRouter()
+
+	router.Use(enableCORS)
 
 	router.HandleFunc("/", getTest)
 	router.HandleFunc("/login", makeHTTPHandleFunc(s.handleLogin))
