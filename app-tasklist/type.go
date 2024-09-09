@@ -5,8 +5,9 @@ import (
 )
 
 type LoginResponse struct {
-	ID    int    `json:"Id"`
-	Token string `json:"token"`
+	Token   string  `json:"token"`
+	ID      int     `json:"id"`
+	Account Account `json:"user_info"`
 }
 
 type LoginRequest struct {
@@ -23,9 +24,12 @@ type CreateAccountRequest struct {
 	Password string `json:"password"`
 }
 
+type DeleteAccountRequest struct {
+	ID int `json:"id"`
+}
+
 type CreateTasklistRequest struct {
-	Title   string `json:"title"`
-	OwnerID int    `json:"owner_id"`
+	Title string `json:"title"`
 }
 
 type GetTasklistRequest struct {
@@ -33,10 +37,15 @@ type GetTasklistRequest struct {
 }
 
 type UpdateTasklistRequest struct {
+	ID    int    `json:"id"`
+	Title string `json:"title"`
+	Task  *Task  `json:"data"`
+}
+
+type DeleteTasklistRequest struct {
 	ID      int    `json:"id"`
 	OwnerID int    `json:"owner_id"`
 	Title   string `json:"title"`
-	Task    *Task  `json:"data"`
 }
 
 type CreateTaskRequest struct {
@@ -46,10 +55,24 @@ type CreateTaskRequest struct {
 	Status      int    `json:"status"`
 }
 
+type UpdateTaskRequest struct {
+	ParentID int   `json:"parent_id"`
+	Task     *Task `json:"data"`
+}
+
+type DeleteTaskRequest struct {
+	ParentID int   `json:"parent_id"`
+	Task     *Task `json:"data"`
+}
 type Account struct {
 	ID       int    `json:"id"`
 	Username string `json:"username"`
 	Password string `json:"password"`
+}
+
+type FullAccount struct {
+	User *Account    `json:"user"`
+	List []*Tasklist `json:"list"`
 }
 
 type Tasklist struct {

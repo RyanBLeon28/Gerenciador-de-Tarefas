@@ -1,12 +1,25 @@
-# back
+## BACKEND
+Como rodar a aplicacao localmente: 
 
+segue o guia pra instalar go:
+```https://go.dev/doc/install```
+entra na pasta app-tasklist/ e executa os seguintes comandos para baixar a dependencias:
+```
+go get github.com/golang-jwt/jwt/v4@v4.5.0
+go get github.com/gorilla/mux@v1.8.1
+go get github.com/mattn/go-sqlite3@v1.14.23
+```
+a partir disso a UNICA maneira de executar o app:
+```make run```
+Se tiver qualquer erro pra rodar isso, pfvr nao me chama e joga no chatgpt, abraco amo vcs
+
+
+## Rotas:
+## Documentacao incompleta !!
 Basicamente todas as requests precisam do token de autentificacao na header, as que nao precisarem estara avisado.
 
 ex. 
     "token" : {...} 
-
-
-## Rotas:
 
 ### User
 

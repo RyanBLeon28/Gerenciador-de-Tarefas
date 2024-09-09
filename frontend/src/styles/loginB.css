@@ -2,16 +2,16 @@ body {
     display: grid;
     height: 100vh;
     margin: 0;
-    align-items: center;        
-    justify-items: center;
     background-color: #fcfcfc;
     width: 100%;
+    place-items: center;
 }
 
   
 .login-container {
     width: 100%;
     max-width: 400px;
+    height: 40%;
     padding: 40px;
     background-color: var(--primary-color);
     border-radius: 8px;

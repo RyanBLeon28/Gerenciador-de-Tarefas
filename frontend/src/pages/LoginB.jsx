@@ -9,16 +9,38 @@ function LoginB() {
 
   const navigate = useNavigate();
 
-  const handleLogin = (event) => {
+  const handleLogin = async (event) => {
     event.preventDefault();
 
-    if (username === 'admin' && password === 'admin') {
-      setError('');
-      navigate('/home');
-    } else {
-      setError('Usuário ou senha incorretos.');
+    try {
+      const response = await fetch('http://localhost:6900/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ username, password })
+      });
+
+      if (!response.ok) {
+        throw new Error('Usuário ou senha incorretos.');
+      }
+
+      const data = await response.json();
+
+      const token = data.token;
+      if (token) {
+        // Armazena o token no localStorage
+        localStorage.setItem('authToken', token);
+        setError('');
+        navigate('/home');
+      } else {
+        setError('Falha ao obter o token de autenticação.');
+      }
+    } catch (err) {
+      setError(err.message);
     }
   };
+
 
   const goToRegister = () => {
     navigate('/register');
