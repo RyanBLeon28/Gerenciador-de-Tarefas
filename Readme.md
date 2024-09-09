@@ -15,6 +15,7 @@ Se tiver qualquer erro pra rodar isso, pfvr nao me chama e joga no chatgpt, abra
 
 
 ## Rotas:
+## Documentacao incompleta !!
 Basicamente todas as requests precisam do token de autentificacao na header, as que nao precisarem estara avisado.
 
 ex. 
