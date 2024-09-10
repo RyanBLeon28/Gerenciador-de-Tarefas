@@ -3,13 +3,9 @@ import "../styles/home.css";
 import { Select, Space } from 'antd';
 import TaskColumn from "../components/column";
 import { TasksContext } from "../context";
-// import { tasksList as initialTasksList } from "../components/Data";
+
 
 function Home() {
-  // const [tasksList, setTasksList] = useState(initialTasksList);
-
-  // const [selectedProject, setSelectedProject] = useState('');
-  // const [searchTerm, setSearchTerm] = useState('');
   
   const { selectedProject, setSelectedProject } = useContext(TasksContext);
   const { toDo, doing, done } = useContext(TasksContext);

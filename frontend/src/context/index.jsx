@@ -10,7 +10,6 @@ const TasksProvider = ({ children }) => {
     const [searchTerm, setSearchTerm] = useState("");
 
     const [tasksList, setTasksList] = useState(initialTasksList);
-    // const [filteredTasks, setFilderedTasks] = useState([]);
 
     const [ toDo, setToDo ] = useState([]);
     const [ doing, setDoing ] = useState([]);

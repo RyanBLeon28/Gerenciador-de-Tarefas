@@ -53,7 +53,6 @@ const TaskCard = ({ index, currentColumn, title, responsible, description}) => {
             default:
               break;
         }
-    
     }
 
     return(
