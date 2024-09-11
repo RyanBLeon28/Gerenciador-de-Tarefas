@@ -3,14 +3,11 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import LoginB from './pages/LoginB';
 import Register from '../src/pages/Register';
 import Home from '../src/pages/Home';
+import { RetrieveToken } from "./service/util";
 
 function App() {
-  const RetriveToken = () => {
-    console.log("oi")
-  }
-
   const ProtectedRoute = ({ children }) => {
-    if (!RetriveToken()) {
+    if (!RetrieveToken()) {
       return <Navigate to="/" replace />;
     }
     return children;

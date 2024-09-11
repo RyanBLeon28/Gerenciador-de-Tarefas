@@ -2,7 +2,7 @@ import React, { useState, useContext } from "react";
 import { Button, Modal, Form, Input } from "antd";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
-import { TasksContext } from "../context";
+import { TasksContext } from "../../context";
 
 const ModalAddTask = () => {
 
