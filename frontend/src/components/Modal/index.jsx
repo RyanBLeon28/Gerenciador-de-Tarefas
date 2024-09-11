@@ -3,6 +3,7 @@ import { Button, Modal, Form, Input } from "antd";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { TasksContext } from "../../context";
+import { RetrieveToken } from "../../service/util";
 
 const ModalAddTask = () => {
 
@@ -24,13 +25,11 @@ const ModalAddTask = () => {
             if(result){
                 handleAddTask();
             } else {
-                handleAddArea(value.area);
+                handleAddArea();
                 handleAddTask();
             }
-            
-            
             console.log(value)
-            success()
+            success();
         })
         .catch((info) => {
             console.log("Validate Failed:", info);
@@ -39,24 +38,24 @@ const ModalAddTask = () => {
     };
 
     const handleAddArea = async (event) => {
-        event.preventDefault();
+        // event.preventDefault();
         
-        try {
-        const response = await fetch('http://localhost:6900/user/taklist', {
-            method: 'POST',
-            headers: {
-            'Content-Type': 'application/json',
-            'token': 'x'
-            },
-            body: JSON.stringify({ event }),
-        });
+        // try {
+        // const response = await fetch('http://localhost:6900/user/taklist', {
+        //     method: 'POST',
+        //     headers: {
+        //     'Content-Type': 'application/json',
+        //     'token': RetrieveToken
+        //     },
+        //     body: JSON.stringify({ event }),
+        // });
     
-        if (!response.ok) {
-            throw new Error('Erro ao criar .');
-        }
-        } catch (err) {
-        console.log(err.message);
-        }
+        // if (!response.ok) {
+        //     throw new Error('Erro ao criar .');
+        // }
+        // } catch (err) {
+        // console.log(err.message);
+        // }
         
     };
 

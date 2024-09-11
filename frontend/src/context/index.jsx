@@ -1,7 +1,7 @@
 import React, { useState, useEffect, createContext } from "react";
 // import { toDoList, doingList, doneList } from "../components/Data";
 import { tasksList as initialTasksList } from "../components/Data";
-
+import { RetrieveToken } from "../service/util";
 export const TasksContext = createContext();
 
 const TasksProvider = ({ children }) => {
@@ -17,32 +17,39 @@ const TasksProvider = ({ children }) => {
     const [ done, setDone ] = useState([]);
 
     useEffect(() => {
-        const fetchTasks = async () => {
-            try {
-                const response = await fetch('http://localhost:6900/user/tasklist', {
-                    method: 'GET',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ username, password }), // Verifique se username e password estão disponíveis
-                });
-
-                if (!response.ok) {
-                    throw new Error('Erro ao buscar os dados');
-                }
-
-                const data = await response.json();
-                console.log("Resposta",data)
-                // Filtra as tarefas com base no status
-                // setToDo(data.filter(task => task.status === 'toDo'));
-                // setDoing(data.filter(task => task.status === 'doing'));
-                // setDone(data.filter(task => task.status === 'done'));
-            } catch (err) {
-                setError(err.message);
+        // const token = RetrieveToken(); 
+        const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHBpcmF0aW9uIjoxNTAwMDAwLCJpZCI6N30.FUf9G0QH8L-rUokLMVvdIXOVXFblkKAxgkK4jan_gUk";
+        console.log("TOKEN",token);
+        fetch('http://localhost:6900/user/tasklist',{
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+              'token': token
             }
-        };
+          })
+            .then(response => {
+              if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+              }
+              return response.json();
+            })
+            .then(data => {
+              console.log(data); // Processa os dados retornados
+            })
+            .catch(error => {
+              console.error('Erro:', error.message); // Detalha o erro
+            });
 
-        fetchTasks();
+        //         // Filtra as tarefas com base no status
+        //         // setToDo(data.filter(task => task.status === 'toDo'));
+        //         // setDoing(data.filter(task => task.status === 'doing'));
+        //         // setDone(data.filter(task => task.status === 'done'));
+        //     } catch (err) {
+        //         console.error(err.message);
+        //     }
+        // };
+
+        // fetchTasks();
     }, []);
 
     // useEffect(() => {
