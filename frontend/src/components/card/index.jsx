@@ -71,15 +71,13 @@ const TaskCard = ({ index, currentColumn, title, responsible, description}) => {
           <h4>{title}</h4>
           <Flex gap="small">
             <Button 
-              type="primary" 
-              icon={<EditOutlined />} 
-              style={{ background: "transparent", border: "none", boxShadow: "none"}}
+              icon={<EditOutlined style={{ fontSize: '20px', color: "#FFF" }} />} 
+              style={{ background: "transparent", border: "none" }}
               onClick={handleUpdateTask} 
             />
             <Button 
-              type="primary" 
-              icon={<DeleteOutlined />} 
-              style={{ background: "transparent", border: "none", boxShadow: "none"}} 
+              icon={<DeleteOutlined style={{ fontSize: '20px', color: "#FFF" }} />} 
+              style={{ background: "transparent", border: "none" }} 
               onClick={handleRemoveTask}
             />
           </Flex>

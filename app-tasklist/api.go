@@ -323,7 +323,7 @@ func (s *APIServer) handleDeleteTask(w http.ResponseWriter, r *http.Request) err
 		return err
 	}
 
-	new_tasklist, err := s.db.Delete_Task(req.ParentID, req.Task.ID)
+	new_tasklist, err := s.db.Delete_Task(req.Task.ID, req.ParentID)
 	if err != nil {
 		log.Printf("error in delete task -> %v", err)
 		return WriteJSON(w, http.StatusBadRequest, err)

@@ -1,9 +1,11 @@
 import { useState, useContext } from "react";
 import "../styles/home.css";
-import { Select, Space } from 'antd';
+import { Flex, Select, Button } from 'antd';
+import { LogoutOutlined } from '@ant-design/icons';
 import TaskColumn from "../components/column";
 import { TasksContext } from "../context";
-
+import { RemoveToken } from "../service/util";
+import { Navigate } from "react-router-dom";
 
 function Home() {
   
@@ -22,22 +24,34 @@ function Home() {
     setTasksList(updatedTasks);
   };
 
+  const handleLogout = () => {
+    RemoveToken();
+    return <Navigate to="/" replace />;
+  }
+
   return (
     <>
       <div className='container'>
         <div className='barSection'>
           <h1>LP Tarefas</h1>
           <div>
-          <Select
-            defaultValue="Selecionar área"
-            style={{ width: 180 }}
-            onChange={handleProjectChange}
-            options={[
-              { value: 'university', label: 'Faculdade' },
-              { value: 'work', label: 'Trabalho' },
-              { value: 'house', label: 'casa' },
-            ]}
-          />
+          <Flex gap="large">
+            <Select
+              defaultValue="Selecionar área"
+              style={{ width: 180 }}
+              onChange={handleProjectChange}
+              options={[
+                { value: 'university', label: 'Faculdade' },
+                { value: 'work', label: 'Trabalho' },
+                { value: 'house', label: 'casa' },
+              ]}
+            />
+            <Button 
+              icon={<LogoutOutlined style={{ fontSize: '26px', color: "#FFF" }}/>} 
+              style={{ background: "transparent", border: "none" }}
+              onClick={handleLogout} 
+            />
+          </Flex>
           </div>
         </div>
         <div className='tasksArea'>
