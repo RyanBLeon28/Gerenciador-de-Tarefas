@@ -1,11 +1,11 @@
-import { useState } from "react";
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import LoginB from './pages/LoginB';
-import Register from '../src/pages/Register';
-import Home from '../src/pages/Home';
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import LoginB from "./pages/LoginB";
+import Register from "../src/pages/Register";
+import Home from "../src/pages/Home";
 import { RetrieveToken } from "./service/util";
 
 function App() {
+
   const ProtectedRoute = ({ children }) => {
     if (!RetrieveToken()) {
       return <Navigate to="/" replace />;
