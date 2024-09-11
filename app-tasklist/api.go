@@ -163,6 +163,7 @@ func (s *APIServer) handleCreateAccount(w http.ResponseWriter, r *http.Request) 
 		return WriteJSON(w, http.StatusInternalServerError, "")
 	}
 
+	// cria tasklist padrao quando o usuario cria a conta
 	_, err = s.db.Create_Tasklist("Home", account.ID)
 
 	return WriteJSON(w, http.StatusOK, user)
