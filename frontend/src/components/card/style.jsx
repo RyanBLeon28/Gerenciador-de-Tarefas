@@ -21,4 +21,9 @@ export const Card = styled.div`
     p{
         margin: 0.5rem 0;
     }
+
+    .task-header{
+        display: flex;
+        justify-content: space-between;
+    }
 `;
