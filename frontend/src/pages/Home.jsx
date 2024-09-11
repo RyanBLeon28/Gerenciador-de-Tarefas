@@ -1,4 +1,4 @@
-import { useState, useContext } from "react";;
+import { useState, useContext } from "react";
 import "../styles/home.css";
 import { Select, Space } from 'antd';
 import TaskColumn from "../components/column";

@@ -1,6 +1,7 @@
 import { useState } from "react"
 import { useNavigate } from "react-router-dom";
 import '../styles/loginB.css'
+import { SaveToken } from "../service/util";
 
 function LoginB() {
   const [username, setUsername] = useState('');
@@ -30,9 +31,11 @@ function LoginB() {
       const token = data.token;
       if (token) {
         // Armazena o token no localStorage
-        localStorage.setItem('authToken', token);
-        setError('');
+        SaveToken(token)
         navigate('/home');
+        // localStorage.setItem('authToken', token);
+        // setError('');
+        // navigate('/home');
       } else {
         setError('Falha ao obter o token de autenticação.');
       }
