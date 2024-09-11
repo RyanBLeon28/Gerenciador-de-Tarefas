@@ -386,11 +386,11 @@ func (s *Sqlite) Update_Task(parent_id int, t *Task) (*Tasklist, error) {
 
 	updated := false
 
-	if og.Title != t.Title {
+	if og.Title != t.Title && t.Title != "" {
 		og.Title = t.Title
 		updated = true
 	}
-	if og.Description != t.Description {
+	if og.Description != t.Description && t.Description != "" {
 		og.Description = t.Description
 		updated = true
 	}
