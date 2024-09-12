@@ -30,12 +30,11 @@ const TaskColumn = ({ column, index, array}) => {
                     currentColumn={index}
                     index={task.id} 
                     title={task.title} 
-                    responsible={task.responsible} 
                     description={task.description}
                     status={task.status}
                 />
             ))}
-            <ModalAddTask />    
+            <ModalAddTask status={index}/>    
         </Column>
     );
 }

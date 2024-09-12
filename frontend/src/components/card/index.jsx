@@ -82,8 +82,7 @@ const TaskCard = ({ index, currentColumn, title, responsible, description}) => {
             />
           </Flex>
         </div>
-        <p><strong>Responsável:</strong> {responsible}</p>
-        <p><strong>Tarefa:</strong> {description}</p>
+        <p><strong>Descrição:</strong> {description}</p>
       </Card>
     );
 }

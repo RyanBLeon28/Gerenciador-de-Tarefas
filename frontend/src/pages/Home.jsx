@@ -1,4 +1,4 @@
-import { useState, useContext } from "react";
+import { useState, useEffect, useContext } from "react";
 import "../styles/home.css";
 import { Flex, Select, Button } from 'antd';
 import { LogoutOutlined } from '@ant-design/icons';
@@ -9,6 +9,7 @@ import { Navigate } from "react-router-dom";
 
 function Home() {
   
+  const { areas } = useContext(TasksContext);
   const { selectedProject, setSelectedProject } = useContext(TasksContext);
   const { toDo, doing, done } = useContext(TasksContext);
   
@@ -40,11 +41,10 @@ function Home() {
               defaultValue="Selecionar área"
               style={{ width: 180 }}
               onChange={handleProjectChange}
-              options={[
-                { value: 'university', label: 'Faculdade' },
-                { value: 'work', label: 'Trabalho' },
-                { value: 'house', label: 'casa' },
-              ]}
+              options={areas.map(element => ({
+                value: element.title, 
+                label: element.title,  
+              }))}
             />
             <Button 
               icon={<LogoutOutlined style={{ fontSize: '26px', color: "#FFF" }}/>} 
@@ -55,9 +55,9 @@ function Home() {
           </div>
         </div>
         <div className='tasksArea'>
-          <TaskColumn column={"Pendências"} index={1} array={toDo}/>
-          <TaskColumn column={"Em andamento"} index={2} array={doing}/>
-          <TaskColumn column={"Concluídas"} index={3} array={done}/>
+          <TaskColumn column={"Pendências"} index={0} array={toDo}/>
+          <TaskColumn column={"Em andamento"} index={1} array={doing}/>
+          <TaskColumn column={"Concluídas"} index={2} array={done}/>
         </div>
       </div>
     </>      

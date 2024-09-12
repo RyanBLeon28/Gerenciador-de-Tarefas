@@ -3,14 +3,17 @@ import { Button, Modal, Form, Input } from "antd";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { TasksContext } from "../../context";
-import { RetrieveToken } from "../../service/util";
+import { addTask } from "../../service/addTaskService";
+import { createArea } from "../../service/createAreaService";
 
-const ModalAddTask = () => {
+const ModalAddTask = ({ status }) => {
+
 
     const [form] = Form.useForm();
     const [isModalOpen, setIsModalOpen] = useState(false);
 
-    const { selectedProject, setSelectedProject } = useContext(TasksContext);
+    const { areas } = useContext(TasksContext);
+    const { selectedProject } = useContext(TasksContext);
   
     const showModal = () => {
         setIsModalOpen(true);
@@ -19,50 +22,32 @@ const ModalAddTask = () => {
     const handleOk = () => {
         form
         .validateFields()
-        .then((value) => {
+        .then(async (value) => {
             form.resetFields();
-            const result = selectedProject.some(element => element.area === value.area);
-            if(result){
-                handleAddTask();
-            } else {
-                handleAddArea();
-                handleAddTask();
-            }
-            console.log(value)
+            let parent_id = await handleParentId(value.area)
+            addTask(parent_id, value.title, value.description, status);
+            handleParentId(value.area)
+            window.location.reload();
             success();
         })
         .catch((info) => {
-            console.log("Validate Failed:", info);
+            // console.log("Validate Failed:", info);
         });
         setIsModalOpen(false);  
     };
 
-    const handleAddArea = async (event) => {
-        // event.preventDefault();
+    const handleParentId = async (area) => {
+        let exists = areas.find(e => e.title === area) 
         
-        // try {
-        // const response = await fetch('http://localhost:6900/user/taklist', {
-        //     method: 'POST',
-        //     headers: {
-        //     'Content-Type': 'application/json',
-        //     'token': RetrieveToken
-        //     },
-        //     body: JSON.stringify({ event }),
-        // });
-    
-        // if (!response.ok) {
-        //     throw new Error('Erro ao criar .');
-        // }
-        // } catch (err) {
-        // console.log(err.message);
-        // }
-        
+        if( !exists ){
+            let newAreaId = await createArea(area);
+            return newAreaId.id;
+        } else {
+            let parent_id = exists.id;
+            return parent_id;
+        }  
     };
-
-    const handleAddTask = () => {
-
-    }
-
+    
     const handleCancel = () => {
         setIsModalOpen(false);
     };
