@@ -1,9 +1,8 @@
 import { RetrieveToken } from "./util";
 
-export const addTask = async (parent_id, title, description, status) => {
-    console.log("addTask print ->", parent_id,title,description,status)
+export const deleteTask = async (parent_id, id) => {
+    console.log("Delete ->", parent_id, id)
     try {
-        
         const token = RetrieveToken(); 
         const response = await fetch('http://localhost:6900/user/tasklist/task', {
         method: 'DELETE',
@@ -13,15 +12,17 @@ export const addTask = async (parent_id, title, description, status) => {
         },
         body: JSON.stringify({
             "parent_id" : parent_id,
-            "title" : title,
-            "description" : description,
-            "status" : status
+            "data" : {
+              "id" : id
+            }
         })
       });
   
       if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+        const errorText = await response.text();
+        throw new Error(`Delete Error: ${errorText}`);
       }
+      return;
       
     } catch (error) {
       console.error('Erro:', error, error.message);

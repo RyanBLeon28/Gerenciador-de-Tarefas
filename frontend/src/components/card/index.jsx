@@ -1,13 +1,16 @@
 import { useContext } from "react";
+import ModalUpdateTask from "../update";
 import { Card } from "./style";
 import { Flex, Button } from "antd";
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import { useDrag } from "react-dnd";
 import { TasksContext } from "../../context";
+import { deleteTask } from "../../service/deleteTaskService";
+import { taskList } from "../../service/tasklistService";
 
-const TaskCard = ({ index, currentColumn, title, responsible, description}) => {
+const TaskCard = ({ index, currentColumn, title, description}) => {
     
-    const { toDo, doing, done, setToDo, setDoing, setDone } = useContext(TasksContext);
+    const { toDo, doing, done, setToDo, setDoing, setDone, areas, selectedProject, setDeleteTask, setTasksList, setIsModalOpen} = useContext(TasksContext);
 
     const [{ isDragging }, drag] = useDrag({
       type: "task",
@@ -57,12 +60,14 @@ const TaskCard = ({ index, currentColumn, title, responsible, description}) => {
       }
     }
 
-    const handleUpdateTask = () => {
-      console.log("editar tarefa")
-    }
-
-    const handleRemoveTask = () => {
-      console.log("remover tarefa")
+    const handleRemoveTask = async(task_id) => {
+      if ( selectedProject ){
+        let parent = areas.find(e => e.title === selectedProject);
+        deleteTask(parent.id, task_id);
+        const data = await taskList();
+        setTasksList(data)
+        // setDeleteTask(true);
+      }
     }
 
     return(
@@ -70,19 +75,15 @@ const TaskCard = ({ index, currentColumn, title, responsible, description}) => {
         <div className="task-header">
           <h4>{title}</h4>
           <Flex gap="small">
-            <Button 
-              icon={<EditOutlined style={{ fontSize: '20px', color: "#FFF" }} />} 
-              style={{ background: "transparent", border: "none" }}
-              onClick={handleUpdateTask} 
-            />
+            <ModalUpdateTask id={index} title={title} description={description} status={currentColumn} />
             <Button 
               icon={<DeleteOutlined style={{ fontSize: '20px', color: "#FFF" }} />} 
               style={{ background: "transparent", border: "none" }} 
-              onClick={handleRemoveTask}
+              onClick={() => handleRemoveTask(index)}
             />
           </Flex>
         </div>
-        <p><strong>Descrição:</strong> {description}</p>
+        <p><strong>Descrição:</strong> {description} </p>
       </Card>
     );
 }

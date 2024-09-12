@@ -1,6 +1,7 @@
 import { RetrieveToken } from "./util";
 
-export const createArea = async (parent_id, title, description, status) => {
+export const updateTask = async (parent_id, id, title, description, status) => {
+    console.log("UPDATE ->", parent_id, id)
     try {
         const token = RetrieveToken();
         const response = await fetch('http://localhost:6900/user/tasklist/task', {
@@ -11,9 +12,12 @@ export const createArea = async (parent_id, title, description, status) => {
         },
         body: JSON.stringify({ 
             "parent_id" : parent_id,
-            "title" : title,
-            "description" : description,
-            "status" : status
+            "data": {
+                "id" : id,
+                "title" : title,
+                "description" : description,
+                "status" : status
+            }
         })
         });
 

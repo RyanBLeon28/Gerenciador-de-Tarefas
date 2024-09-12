@@ -34,7 +34,7 @@ export const Column = styled.div`
         text-align: end;
     }
 
-    div.headerTasks{
+    div.headerColumn{
         display: flex;
         justify-content: space-between;
     }

@@ -1,20 +1,33 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { Button, Modal, Form, Input } from "antd";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus } from "@fortawesome/free-solid-svg-icons";
+import { EditOutlined } from '@ant-design/icons';
 import { TasksContext } from "../../context";
-import { addTask } from "../../service/addTaskService";
 import { createArea } from "../../service/createAreaService";
+import { updateTask } from "../../service/updateTaskService";
 
-const ModalAddTask = ({ status }) => {
+const ModalUpdateTask = ({ id, title, description, status }) => {
 
     const [form] = Form.useForm();
     const [isModalOpen, setIsModalOpen] = useState(false);
-
+    
     const { areas } = useContext(TasksContext);
-  
+    const { selectedProject } = useContext(TasksContext);
+    const { setTasksList } = useContext(TasksContext);
+
+    useEffect(() => {
+        if (isModalOpen) {
+            let area = areas.find(e => e.title === selectedProject) 
+            form.setFieldsValue({
+                title: title,
+                area: area.title,
+                description: description,
+            });
+        }
+    }, [isModalOpen]);
+
     const showModal = () => {
         setIsModalOpen(true);
+        handleUpdateTask();
     };
 
     const handleOk = () => {
@@ -23,9 +36,11 @@ const ModalAddTask = ({ status }) => {
         .then(async (value) => {
             form.resetFields();
             let parent_id = await handleParentId(value.area)
-            addTask(parent_id, value.title, value.description, status);
+            updateTask(parent_id, id, value.title, value.description, status);
             handleParentId(value.area)
-            window.location.reload();
+            const data = await taskList();
+            setTasksList(data)
+            // window.location.reload();
         })
         .catch((info) => {
             console.log("Validate Failed:", info);
@@ -51,15 +66,16 @@ const ModalAddTask = ({ status }) => {
 
     return (
         <>
-            <Button onClick={showModal} style={{ background: "transparent", borderColor: "#FFF", color: "#FFF" }}>
-                <FontAwesomeIcon icon={faPlus} />
-                Adicionar Task
-            </Button>
+            <Button 
+                onClick={showModal} 
+                icon={<EditOutlined style={{ fontSize: '20px', color: "#FFF" }} />} 
+                style={{ background: "transparent", border: "none" }}
+            /> 
             <Modal 
-                title="Adicionar Tarefa" 
+                title="Editar Tarefa" 
                 open={isModalOpen} 
                 onOk={handleOk} 
-                okText={"Adicionar"}
+                okText={"Editar"}
                 okButtonProps={{ style: { backgroundColor: "rgb(28, 115, 80)" } }} 
                 onCancel={handleCancel}  
                 cancelText={"Cancelar"}
@@ -74,12 +90,23 @@ const ModalAddTask = ({ status }) => {
                     <Form.Item label="Área" name="area" required tooltip="Crie uma área para adicionar a tarefa">
                         <Input placeholder="título" />
                     </Form.Item>
-                    <Form.Item label="Descrição" name="description" required tooltip="Crie uma descrição para tarefa">
-                        <Input.TextArea />
+                    <Form.Item label="Descrição" name="description"  required tooltip="Crie uma descrição para tarefa">
+                        <Input.TextArea
+                            placeholder="descrição"
+                            autoSize={{
+                                minRows: 3,
+                                maxRows: 5,
+                            }}
+                        />
                     </Form.Item>
                 </Form>
             </Modal>
         </>
     );
 };
-export default ModalAddTask;
+export default ModalUpdateTask;
+
+// <Button onClick={showModal} style={{ background: "transparent", borderColor: "#FFF", color: "#FFF" }}>
+            //     <FontAwesomeIcon icon={faPlus} />
+            //     Adicionar Task
+            // </Button>

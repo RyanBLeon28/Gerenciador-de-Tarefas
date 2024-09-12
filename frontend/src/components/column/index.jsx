@@ -1,4 +1,5 @@
 import ModalAddTask from "../modal";
+import ModalUpdateTask from "../update";
 import TaskCard from "../card";
 import { Column } from "./style";
 import { useDrop } from "react-dnd";
@@ -18,7 +19,7 @@ const TaskColumn = ({ column, index, array}) => {
 
     return(
         <Column ref={dropref} style={{ border: isOver ? "dashed 2px white" : "  " }}>
-            <div className='headerTasks'>
+            <div className='headerColumn'>
                 <h2>{column}</h2>
                 <button className="setting-button" >
                     <p>...</p>
