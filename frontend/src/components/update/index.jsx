@@ -11,8 +11,8 @@ const ModalUpdateTask = ({ id, title, description, status }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     
     const { areas } = useContext(TasksContext);
-    const { selectedProject } = useContext(TasksContext);
-    const { setTasksList } = useContext(TasksContext);
+    const { selectedProject, setSelectedProject } = useContext(TasksContext);
+    const { setTasksList, updateFlag, setUpdateFlag } = useContext(TasksContext);
 
     useEffect(() => {
         if (isModalOpen) {
@@ -27,7 +27,6 @@ const ModalUpdateTask = ({ id, title, description, status }) => {
 
     const showModal = () => {
         setIsModalOpen(true);
-        handleUpdateTask();
     };
 
     const handleOk = () => {
@@ -38,8 +37,9 @@ const ModalUpdateTask = ({ id, title, description, status }) => {
             let parent_id = await handleParentId(value.area)
             updateTask(parent_id, id, value.title, value.description, status);
             handleParentId(value.area)
-            const data = await taskList();
-            setTasksList(data)
+            setUpdateFlag(!updateFlag)
+            // const data = await taskList();
+            // setTasksList(data)
             // window.location.reload();
         })
         .catch((info) => {

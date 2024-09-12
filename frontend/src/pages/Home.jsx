@@ -18,13 +18,6 @@ function Home() {
     setSelectedProject(value);
   };
 
-  const updateTaskStatus = (taskId, newStatus) => {
-    const updatedTasks = tasksList.map(task =>
-      task.id === taskId ? { ...task, status: newStatus } : task
-    );
-    setTasksList(updatedTasks);
-  };
-
   const handleLogout = () => {
     RemoveToken();
     return <Navigate to="/" replace />;

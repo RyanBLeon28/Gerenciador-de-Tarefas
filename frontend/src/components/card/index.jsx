@@ -10,7 +10,7 @@ import { taskList } from "../../service/tasklistService";
 
 const TaskCard = ({ index, currentColumn, title, description}) => {
     
-    const { toDo, doing, done, setToDo, setDoing, setDone, areas, selectedProject, setDeleteTask, setTasksList, setIsModalOpen} = useContext(TasksContext);
+    const { toDo, doing, done, setToDo, setDoing, setDone, areas, selectedProject, setDeleteTask, setTasksList } = useContext(TasksContext);
 
     const [{ isDragging }, drag] = useDrag({
       type: "task",
@@ -19,19 +19,19 @@ const TaskCard = ({ index, currentColumn, title, description}) => {
         const dropResult = monitor.getDropResult();  
         if (dropResult) {
           switch (currentColumn) {
-            case 1:
-                const toDoTask = toDo.find(element => element.id === item.index)
-                handleTask(toDoTask, dropResult.columnId)
+            case 0:
+                const toDoTask = toDo.find(element => element.id === item.index);
+                handleTask(toDoTask, dropResult.columnId);
                 setToDo(toDo.filter(element => element.id !== item.index));
               break;
-            case 2:
-                const doingTask = doing.find(element => element.id === item.index)
-                handleTask(doingTask, dropResult.columnId)
+            case 1:
+                const doingTask = doing.find(element => element.id === item.index);
+                handleTask(doingTask, dropResult.columnId);
                 setDoing(doing.filter(element => element.id !== item.index));
               break;
-            case 3:
-                const doneTask = done.find(element => element.id === item.index)
-                handleTask(doneTask, dropResult.columnId)
+            case 2:
+                const doneTask = done.find(element => element.id === item.index);
+                handleTask(doneTask, dropResult.columnId);
                 setDone(done.filter(element => element.id !== item.index));
               break;
             default:
@@ -46,13 +46,13 @@ const TaskCard = ({ index, currentColumn, title, description}) => {
 
     const handleTask = (task, id) => {
       switch (id) {
-        case 1:
+        case 0:
             setToDo((prevTasks) => [...prevTasks, task])
           break;
-        case 2:
+        case 1:
             setDoing((prevTasks) => [...prevTasks, task])
           break;
-        case 3:
+        case 2:
             setDone((prevTasks) => [...prevTasks, task])
           break;
         default:

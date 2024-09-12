@@ -18,6 +18,7 @@ const TasksProvider = ({ children }) => {
     const [ done, setDone ] = useState([]);
 
     const [deleteTask, setDeleteTask] = useState(false);
+    const [updateFlag, setUpdateFlag] = useState(false);
 
     const handleLoadTasks = async () => {
       const data = await taskList();
@@ -29,16 +30,30 @@ const TasksProvider = ({ children }) => {
 
     const handleFilter = (selected) => {
       let filteredTasks = tasksList;
-      // console.log("lista", taskList)
-      filteredTasks = tasksList.filter(e => e.title === selected);
-      setToDo(filteredTasks[0].data.filter(task => task.status === 0));
-      setDoing(filteredTasks[0].data.filter(task => task.status === 1));
-      setDone(filteredTasks[0].data.filter(task => task.status === 2));
+      filteredTasks = tasksList.find(e => e.title === selected);
+    
+      if (filteredTasks) {
+        setToDo(filteredTasks.data.filter(task => task.status === 0));
+        setDoing(filteredTasks.data.filter(task => task.status === 1));
+        setDone(filteredTasks.data.filter(task => task.status === 2));
+      }
     }
+
 
     useEffect(() => {
       handleLoadTasks()
     }, []);
+
+    // useEffect(() => {
+    //   console.log("haha", tasksList)
+    //   // handleFilter()
+    // }, [tasksList]);
+
+    // useEffect(() => {
+    //   handleLoadTasks();
+    //   // handleFilter(selectedProject);
+
+    // }, [updateFlag]);
 
     // useEffect(() => {
     //   handleLoadTasks()
@@ -48,10 +63,8 @@ const TasksProvider = ({ children }) => {
     useEffect(() => { 
       if (selectedProject) {
         handleFilter(selectedProject)
-        // console.log("chama o filter");
-      } 
-      
-    }, [selectedProject, taskList]);
+      }
+    }, [selectedProject]);
 
 
     return(
@@ -64,7 +77,8 @@ const TasksProvider = ({ children }) => {
           areas, setAreas,
           setDeleteTask,
           setTasksList,
-          isModalOpen, setIsModalOpen}}>
+          updateFlag, setUpdateFlag,
+          }}>
             {children}
         </TasksContext.Provider>
     );
